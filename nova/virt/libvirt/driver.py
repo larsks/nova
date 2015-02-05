@@ -95,6 +95,7 @@ from nova.virt import driver
 from nova.virt import event as virtevent
 from nova.virt import firewall
 from nova.virt import hardware
+from nova.virt.libvirt import domxmlfilters
 from nova.virt.libvirt import blockinfo
 from nova.virt.libvirt import config as vconfig
 from nova.virt.libvirt import dmcrypt
@@ -4149,6 +4150,9 @@ class LibvirtDriver(driver.ComputeDriver):
                                       disk_info, rescue, block_device_info,
                                       context)
         xml = conf.to_xml()
+        xml = domxmlfilters.filter_domain_xml(xml,
+                                              instance=instance,
+                                              context=context)
 
         if write_to_disk:
             instance_dir = libvirt_utils.get_instance_path(instance)
